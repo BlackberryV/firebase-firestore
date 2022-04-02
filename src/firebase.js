@@ -1,6 +1,6 @@
 import {initializeApp} from "firebase/app";
 import {getAuth} from "firebase/auth";
-import {getFirestore, collection, getDocs, addDoc, deleteDoc, doc} from "firebase/firestore";
+import {getFirestore, collection, onSnapshot, getDocs, addDoc, deleteDoc, doc} from "firebase/firestore";
 import {useCollection} from "react-firebase-hooks/firestore";
 
 const firebaseConfig = {
@@ -19,17 +19,28 @@ const db = getFirestore(app);
 
 const colRef = collection(db, "books")
 
-export const getBooks = getDocs(colRef)
-    .then((snapshot) => {
-        let books = [];
-        snapshot.docs.forEach((doc) => {
-            books.push({...doc.data(), id: doc.id});
-        })
-        console.log(books)
+//Without subscribe
+
+// getDocs(colRef)
+//     .then((snapshot) => {
+//         let books = [];
+//         snapshot.docs.forEach((doc) => {
+//             books.push({...doc.data(), id: doc.id});
+//         })
+//         console.log(books)
+//     })
+//     .catch(err => {
+//         console.log(err.message)
+//     })
+
+//With subscribe
+onSnapshot(colRef, (snapshot) => {
+    let books = [];
+    snapshot.docs.forEach((doc) => {
+        books.push({...doc.data(), id: doc.id});
     })
-    .catch(err => {
-        console.log(err.message)
-    })
+    console.log(books)
+})
 
 export const addBook = (title, author) => {
     addDoc(colRef, {
