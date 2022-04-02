@@ -4,7 +4,7 @@ import {
     getFirestore, collection, onSnapshot,
     getDocs, addDoc, deleteDoc, doc,
     query, where, orderBy,
-    serverTimestamp, getDoc
+    serverTimestamp, getDoc, updateDoc
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -41,13 +41,13 @@ const q = query(colRef, orderBy("createdAt"));
 //     })
 
 //With subscribe
-onSnapshot(q, (snapshot) => {
-    let books = [];
-    snapshot.docs.forEach((doc) => {
-        books.push({...doc.data(), id: doc.id});
-    })
-    console.log(books)
-})
+// onSnapshot(q, (snapshot) => {
+//     let books = [];
+//     snapshot.docs.forEach((doc) => {
+//         books.push({...doc.data(), id: doc.id});
+//     })
+//     console.log(books)
+// })
 
 export const addBook = (title, author) => {
     addDoc(colRef, {
@@ -62,16 +62,21 @@ export const deleteBook = (id) => {
     deleteDoc(docRef).then()
 }
 
+export const updateBook = (id, title, author) => {
+    const docRef = doc(db, "books", id);
+    updateDoc(docRef, {title: title, author: author}).then()
+}
+
 
 const docRef = doc(db, "books", "jydVAN861uwsPYal1Zvi")
-
+//
 // Without subscribe
 // getDoc(docRef)
 //     .then((doc) => {
 //     console.log(doc.data(), doc.id)
 // })
 
-//With subscribe
+// With subscribe
 onSnapshot(docRef, (doc) => {
     console.log(doc.data(), doc.id)
 })
