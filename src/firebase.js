@@ -1,7 +1,10 @@
 import {initializeApp} from "firebase/app";
 import {getAuth} from "firebase/auth";
-import {getFirestore, collection, onSnapshot, getDocs, addDoc, deleteDoc, doc} from "firebase/firestore";
-import {useCollection} from "react-firebase-hooks/firestore";
+import {
+    getFirestore, collection, onSnapshot,
+    getDocs, addDoc, deleteDoc, doc,
+    query, where
+} from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAZIJJ6XwI_Dzs044WWUHeIsZNk9yywxt0",
@@ -19,8 +22,10 @@ const db = getFirestore(app);
 
 const colRef = collection(db, "books")
 
-//Without subscribe
+//queries
+const q = query(colRef, where("author", "==", "John Grishem"));
 
+//Without subscribe
 // getDocs(colRef)
 //     .then((snapshot) => {
 //         let books = [];
@@ -34,7 +39,7 @@ const colRef = collection(db, "books")
 //     })
 
 //With subscribe
-onSnapshot(colRef, (snapshot) => {
+onSnapshot(q, (snapshot) => {
     let books = [];
     snapshot.docs.forEach((doc) => {
         books.push({...doc.data(), id: doc.id});
