@@ -3,7 +3,8 @@ import {
     getAuth,
     createUserWithEmailAndPassword,
     signOut,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    onAuthStateChanged
 } from "firebase/auth";
 import {
     getFirestore, collection, onSnapshot,
@@ -93,7 +94,7 @@ export const updateBook = (id, title, author) => {
 export const signUpUser = (email, password) => {
     createUserWithEmailAndPassword(auth, email, password)
         .then((cred) => {
-            console.log("User created: " + cred.user)
+            // console.log("User created: " + cred.user)
         })
         .catch((err) => {
             console.log(err.message)
@@ -103,7 +104,7 @@ export const signUpUser = (email, password) => {
 export const logInUser = (email, password) => {
     signInWithEmailAndPassword(auth, email, password)
         .then((cred) => {
-            console.log("User signed in: " + cred.user)
+            // console.log("User signed in: " + cred.user)
         })
         .catch((err) => {
             console.log(err.message)
@@ -113,9 +114,13 @@ export const logInUser = (email, password) => {
 export const signOutUser = () => {
     signOut(auth)
         .then(() => {
-            console.log("User is signed out")
+            // console.log("User is signed out")
         })
         .catch((err) => {
             console.log(err.message)
         })
 }
+
+onAuthStateChanged(auth, (user) => {
+    console.log("User status changed: " + user)
+})
