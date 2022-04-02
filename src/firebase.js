@@ -1,5 +1,10 @@
 import {initializeApp} from "firebase/app";
-import {getAuth} from "firebase/auth";
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signOut,
+    signInWithEmailAndPassword
+} from "firebase/auth";
 import {
     getFirestore, collection, onSnapshot,
     getDocs, addDoc, deleteDoc, doc,
@@ -18,7 +23,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-// const auth = getAuth(app);
+//init services
+const auth = getAuth(app);
 const db = getFirestore(app);
 
 const colRef = collection(db, "books")
@@ -67,8 +73,8 @@ export const updateBook = (id, title, author) => {
     updateDoc(docRef, {title: title, author: author}).then()
 }
 
+// const docRef = doc(db, "books", "jydVAN861uwsPYal1Zvi")
 
-const docRef = doc(db, "books", "jydVAN861uwsPYal1Zvi")
 //
 // Without subscribe
 // getDoc(docRef)
@@ -77,6 +83,39 @@ const docRef = doc(db, "books", "jydVAN861uwsPYal1Zvi")
 // })
 
 // With subscribe
-onSnapshot(docRef, (doc) => {
-    console.log(doc.data(), doc.id)
-})
+// onSnapshot(docRef, (doc) => {
+//     console.log(doc.data(), doc.id)
+// })
+
+
+//AUTHENTICATION
+
+export const signUpUser = (email, password) => {
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((cred) => {
+            console.log("User created: " + cred.user)
+        })
+        .catch((err) => {
+            console.log(err.message)
+        })
+}
+
+export const logInUser = (email, password) => {
+    signInWithEmailAndPassword(auth, email, password)
+        .then((cred) => {
+            console.log("User signed in: " + cred.user)
+        })
+        .catch((err) => {
+            console.log(err.message)
+        })
+}
+
+export const signOutUser = () => {
+    signOut(auth)
+        .then(() => {
+            console.log("User is signed out")
+        })
+        .catch((err) => {
+            console.log(err.message)
+        })
+}

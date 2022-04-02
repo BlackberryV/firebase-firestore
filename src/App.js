@@ -1,13 +1,13 @@
-import AddForm from "./AddForm";
-import DeleteForm from "./DeleteForm";
-import UpdateDocForm from "./UpdateDocForm";
+import {signOutUser} from "./firebase";
+import SignUpForm from "./SignUpForm";
+import LogInForm from "./LogInForm";
 
 function App() {
     return (
         <div className="App">
-            <AddForm/>
-            <DeleteForm/>
-            <UpdateDocForm/>
+            <SignUpForm/>
+            <LogInForm/>
+            <button onClick={() => signOutUser()}>Sign out</button>
         </div>
     );
 }

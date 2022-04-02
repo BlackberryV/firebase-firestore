@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {deleteBook, updateBook} from "./firebase";
+import {updateBook} from "./firebase";
 
 const UpdateDocForm = () => {
     const [id, setId] = useState("");
