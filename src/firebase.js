@@ -3,7 +3,8 @@ import {getAuth} from "firebase/auth";
 import {
     getFirestore, collection, onSnapshot,
     getDocs, addDoc, deleteDoc, doc,
-    query, where
+    query, where, orderBy,
+    serverTimestamp, getDoc
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -23,7 +24,8 @@ const db = getFirestore(app);
 const colRef = collection(db, "books")
 
 //queries
-const q = query(colRef, where("author", "==", "John Grishem"));
+// const q = query(colRef, where("author", "==", "John Grishem"), orderBy("title", "asc"));
+const q = query(colRef, orderBy("createdAt"));
 
 //Without subscribe
 // getDocs(colRef)
@@ -51,6 +53,7 @@ export const addBook = (title, author) => {
     addDoc(colRef, {
         title: title,
         author: author,
+        createdAt: serverTimestamp()
     }).then()
 }
 
@@ -58,3 +61,17 @@ export const deleteBook = (id) => {
     const docRef = doc(db, "books", id);
     deleteDoc(docRef).then()
 }
+
+
+const docRef = doc(db, "books", "jydVAN861uwsPYal1Zvi")
+
+// Without subscribe
+// getDoc(docRef)
+//     .then((doc) => {
+//     console.log(doc.data(), doc.id)
+// })
+
+//With subscribe
+onSnapshot(docRef, (doc) => {
+    console.log(doc.data(), doc.id)
+})
